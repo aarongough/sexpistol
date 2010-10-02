@@ -22,6 +22,7 @@ class Sexpistol
       tokens << t.to_f and next if( is_float?(t))
       tokens << t.to_i and next if( is_integer?(t))
       tokens << t.to_sym and next if( is_identifier?(t) || is_symbol?(t))
+      tokens << eval(t) and next if( is_string_literal?(t))
       raise "\nUnrecognized token: #{t}\n"
     end
     return tokens
@@ -67,6 +68,11 @@ class Sexpistol
   # Test to see whether or not a string represents an identifier
   def is_identifier?( string )
     is_match?( string, /_*[a-zA-Z]+[a-zA-Z0-9_]*\??\!?/ )
+  end
+  
+  # Test to see whether or not a string represents a string literal
+  def is_string_literal?( string )
+    is_match?( string, /".*"/)
   end
 
   # Test to see whether or not a string represents a symbol
