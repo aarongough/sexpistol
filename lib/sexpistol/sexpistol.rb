@@ -16,7 +16,16 @@ class Sexpistol
     string.gsub!(")", " ) ")
     string_array = string.split
     tokens = process_tokens( string_array )
+    check_tokens( tokens )
     structure( tokens )
+  end
+  
+  # Check and array of tokens to make sure that the number
+  # of open and closing parentheses match
+  def check_tokens( tokens )
+    unless( (tokens.reject {|x| x == "("}).length == (tokens.reject {|x| x == ")"}).length)
+      raise Exception, "Invalid S-Expression. The number of opening and closing parentheses do not match."
+    end
   end
 
   # Iterate over an array of strings and turn each
