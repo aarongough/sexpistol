@@ -114,6 +114,18 @@ class Sexpistol
   def is_symbol?( string )
     is_match?( string, /[\!\*\^=\/\+\-]+/ )
   end
+  
+  # Convert a set of nested arrays back into an S-Expression
+  def to_sexp( data )
+    mapped = data.map do |item|
+      if( item.is_a?(Array))
+        to_sexp(item)
+      else
+        item.to_s
+      end
+    end
+    "( " + mapped.join(" ") + " )"
+  end
 
   private
 
