@@ -3,6 +3,12 @@
 # native Ruby representation like:
 #   [:def, :something [:lambda, [:a], [:do_something]]]
 class Sexpistol
+  attr_accessor :ruby_keyword_literals
+
+  def initialize
+    @ruby_keyword_literals = false
+  end
+
   # Parse a string containing an S-Expression into a
   # nested set of Ruby arrays
   def parse_string( string )
@@ -18,6 +24,11 @@ class Sexpistol
   def process_tokens( token_array )
     tokens = []
     token_array.each do |t|
+      if(@ruby_keyword_literals)
+        tokens << nil and next if(is_nil?(t))
+        tokens << true and next if(is_true?(t))
+        tokens << false and next if(is_false?(t))
+      end
       tokens << t and next if(is_paren?(t))
       tokens << t.to_f and next if( is_float?(t))
       tokens << t.to_i and next if( is_integer?(t))
@@ -48,6 +59,21 @@ class Sexpistol
     else
       return program
     end
+  end
+
+  # Test to see whether or not a string represents the 'nil' literal
+  def is_nil?( string )
+    true if(string == "nil")
+  end
+  
+  # Test to see whether or not a string represents the 'true' literal
+  def is_true?( string )
+    true if(string == "true")
+  end
+  
+  # Test to see whether or not a string represents the 'false' literal
+  def is_false?( string )
+    true if(string == "false")
   end
 
   # Test to see whether a string represents a parentheses
