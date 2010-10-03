@@ -5,19 +5,21 @@ Sexpistol is a simple library for parsing S-Expressions in Ruby. Sexpistol takes
 === Example
 
   (define test (lambda () (
-    (print "blah")
+    (print "Hello world!\n")
     (print 1)
     (print 9.01)
+    (print 2.0e10)
     (print (+ 10 12 13))
   )))
   
 would be parsed by Sexpistol like so:
 
   [:define, :test, [:lambda, [], [
-    [:print, "blah"],
+    [:print, "Hello world!\n"],
     [:print, 1],
     [:print, 9.01],
-    [:print, [:"+", 10, 12, 13]]
+    [:print, 2.0e10],
+    [:print, [:+, 10, 12, 13]]
   ]]]
   
 === Type mappings
@@ -26,9 +28,9 @@ Sexpistol supports all of the standard datatypes and converts them directly to t
 
 * Lists (a b c)
 * Integers (1 2 3)
-* Floats (1.0 2.0 42.9)
+* Floats (1.0 2.0 42.9 3e6 1.2e2)
 * Strings ("\t\"Hello world!\"\n")
-* Symbols (symbol Symbol __symbol__ symbo_l symbol? symbol!)
+* Symbols (symbol Symbol ____symbol____ symbo_l symbol? symbol! + - / ++ a+ e$, etc...)
 
 Sexpistol also supports mapping the Ruby keyword literals (nil, true, false) to their native Ruby types, although this is disabled by default for compatibility. To enable it use `@parser.ruby_keyword_literals = true`, eg:
   
