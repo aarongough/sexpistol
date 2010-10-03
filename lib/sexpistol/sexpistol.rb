@@ -120,7 +120,7 @@ class Sexpistol
   
   # Test to see whether or not a string represents a float
   def is_float?( string )
-    is_match?( string, /[\-\+]?[0-9]+\.[0-9]+/ )
+    is_match?( string, /[\-\+]?[0-9]+\.[0-9]+(e[0-9]+)?/ )
   end
 
   # Test to see whether or not a string represents a symbol
