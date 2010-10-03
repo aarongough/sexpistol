@@ -12,9 +12,7 @@ class Sexpistol
   # Parse a string containing an S-Expression into a
   # nested set of Ruby arrays
   def parse_string( string )
-    string.gsub!("(", " ( ")
-    string.gsub!(")", " ) ")
-    string_array = string.split
+    string_array = split_outside_strings(string)
     tokens = process_tokens( string_array )
     check_tokens( tokens )
     structure( tokens )
@@ -69,6 +67,31 @@ class Sexpistol
       return program
     end
   end
+  
+  # Split up a string into an array where delimited by whitespace,
+  # except inside string literals
+  def split_outside_strings( string )
+    string_literal_pattern = /"([^"\\]|\\.)*"/
+    string_token = "__++STRING_LITERAL++__"
+    # Find and extract all the string literals
+    string_literals = []
+    string.gsub(string_literal_pattern) {|x| string_literals << x}
+    # Replace all the string literals with a special token
+    string = string.gsub(string_literal_pattern, string_token )
+    # Split the string up on whitespace
+    string.gsub!("(", " ( ")
+    string.gsub!(")", " ) ")
+    array = string.split(" ")
+    # replace the special string token with the original strings
+    array.collect! do |x|
+      if( x == string_token)
+        string_literals.shift
+      else
+        x
+      end
+    end
+    return array
+  end
 
   # Test to see whether or not a string represents the 'nil' literal
   def is_nil?( string )
@@ -107,7 +130,7 @@ class Sexpistol
   
   # Test to see whether or not a string represents a string literal
   def is_string_literal?( string )
-    is_match?( string, /".*"/)
+    is_match?( string, /"([^"\\]|\\.)*"/)
   end
   
   # Convert a set of nested arrays back into an S-Expression

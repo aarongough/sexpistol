@@ -25,5 +25,15 @@ class StringLiteralTest < Test::Unit::TestCase
     ast = @parser.parse_string('"\n\t\r"')
     assert_equal ["\n\t\r"], ast
   end
+  
+  test "should parse string literal containing spaces" do
+    ast = @parser.parse_string('"blah foo"')
+    assert_equal ["blah foo"], ast
+  end
+  
+  test "should parse string literal containing newlines" do
+    ast = @parser.parse_string('"blah' + "\n" + 'foo"')
+    assert_equal ["blah\nfoo"], ast
+  end
     
 end

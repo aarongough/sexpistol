@@ -11,6 +11,11 @@ class RubyKeywordLiteralsTest < Test::Unit::TestCase
     assert_equal [[:this, [:is, [:an, [:s_expression]]]]], ast
   end
   
+  test "should create nested set of arrays from s-expression with string literals" do
+    ast = @parser.parse_string('(this (is (an ("s_expression"))))')
+    assert_equal [[:this, [:is, [:an, ["s_expression"]]]]], ast
+  end
+  
   test "should raise error on broken s-expression" do
     assert_raises Exception do
       ast = @parser.parse_string('(this (is (an (s_expression) too)')
