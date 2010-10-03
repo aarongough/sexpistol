@@ -25,6 +25,11 @@ class FloatLiteralTest < Test::Unit::TestCase
     ast = @parser.parse_string("1.0000127829")
     assert_equal [1.0000127829], ast
   end
+  
+  test "should parse sexp containing a float defined in scientific notation" do
+    ast = @parser.parse_string("1.0e6")
+    assert_equal [1.0e6], ast
+  end
     
     
 end

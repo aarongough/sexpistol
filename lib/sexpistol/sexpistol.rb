@@ -12,9 +12,7 @@ class Sexpistol
   # Parse a string containing an S-Expression into a
   # nested set of Ruby arrays
   def parse_string( string )
-    string.gsub!("(", " ( ")
-    string.gsub!(")", " ) ")
-    string_array = string.split
+    string_array = split_outside_strings(string)
     tokens = process_tokens( string_array )
     check_tokens( tokens )
     structure( tokens )
@@ -24,7 +22,7 @@ class Sexpistol
   # of open and closing parentheses match
   def check_tokens( tokens )
     unless( (tokens.reject {|x| x == "("}).length == (tokens.reject {|x| x == ")"}).length)
-      raise Exception, "Invalid S-Expression. The number of opening and closing parentheses do not match."
+      raise Exception, "Invalid S-Expression. The number of opening and closing parentheses does not match."
     end
   end
 
@@ -41,7 +39,7 @@ class Sexpistol
       tokens << t and next if(is_paren?(t))
       tokens << t.to_f and next if( is_float?(t))
       tokens << t.to_i and next if( is_integer?(t))
-      tokens << t.to_sym and next if( is_identifier?(t) || is_symbol?(t))
+      tokens << t.to_sym and next if( is_symbol?(t))
       tokens << eval(t) and next if( is_string_literal?(t))
       raise "\nUnrecognized token: #{t}\n"
     end
@@ -68,6 +66,31 @@ class Sexpistol
     else
       return program
     end
+  end
+  
+  # Split up a string into an array where delimited by whitespace,
+  # except inside string literals
+  def split_outside_strings( string )
+    string_literal_pattern = /"([^"\\]|\\.)*"/
+    string_token = "__++STRING_LITERAL++__"
+    # Find and extract all the string literals
+    string_literals = []
+    string.gsub(string_literal_pattern) {|x| string_literals << x}
+    # Replace all the string literals with a special token
+    string = string.gsub(string_literal_pattern, string_token)
+    # Split the string up on whitespace and parentheses
+    string.gsub!("(", " ( ")
+    string.gsub!(")", " ) ")
+    array = string.split(" ")
+    # replace the special string token with the original string literals
+    array.collect! do |x|
+      if( x == string_token)
+        string_literals.shift
+      else
+        x
+      end
+    end
+    return array
   end
 
   # Test to see whether or not a string represents the 'nil' literal
@@ -97,22 +120,17 @@ class Sexpistol
   
   # Test to see whether or not a string represents a float
   def is_float?( string )
-    is_match?( string, /[\-\+]?[0-9]+\.[0-9]+/ )
-  end
-
-  # Test to see whether or not a string represents an identifier
-  def is_identifier?( string )
-    is_match?( string, /_*[a-zA-Z]+[a-zA-Z0-9_]*\??\!?/ )
-  end
-  
-  # Test to see whether or not a string represents a string literal
-  def is_string_literal?( string )
-    is_match?( string, /".*"/)
+    is_match?( string, /[\-\+]?[0-9]+\.[0-9]+(e[0-9]+)?/ )
   end
 
   # Test to see whether or not a string represents a symbol
   def is_symbol?( string )
-    is_match?( string, /[\!\*\^=\/\+\-]+/ )
+    is_match?( string, /[^\"\'\,\(\)]+/ )
+  end
+  
+  # Test to see whether or not a string represents a string literal
+  def is_string_literal?( string )
+    is_match?( string, /"([^"\\]|\\.)*"/)
   end
   
   # Convert a set of nested arrays back into an S-Expression
