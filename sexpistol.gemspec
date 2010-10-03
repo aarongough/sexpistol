@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sexpistol}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Gough"]
-  s.date = %q{2010-10-02}
+  s.date = %q{2010-10-03}
   s.description = %q{Sexpistol is an easy-to-use S-Expression parser for Ruby. It is fast and has no dependencies.}
   s.email = %q{aaron@aarongough.com}
   s.extra_rdoc_files = [
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
      "VERSION",
      "lib/sexpistol.rb",
      "lib/sexpistol/sexpistol.rb",
+     "sexpistol.gemspec",
      "test/setup/test_unit_extensions.rb",
      "test/test_helper.rb",
      "test/unit/float_literal_test.rb",
