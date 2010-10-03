@@ -45,5 +45,30 @@ class SymbolTest < Test::Unit::TestCase
     ast = @parser.parse_string("__TestSymbol_TEST__?")
     assert_equal [:__TestSymbol_TEST__?], ast
   end
+  
+  test "should parse symbol containing addition operators" do
+    ast = @parser.parse_string("+")
+    assert_equal [:+], ast
+  end
+  
+  test "should parse symbol containing multiplication operators" do
+    ast = @parser.parse_string("*")
+    assert_equal [:*], ast
+  end
+  
+  test "should parse symbol containing subtraction operators" do
+    ast = @parser.parse_string("-")
+    assert_equal [:-], ast
+  end
+  
+  test "should parse symbol containing division operators" do
+    ast = @parser.parse_string("/")
+    assert_equal [:"/"], ast
+  end
+  
+  test "should parse symbol containing any character except single and double quotes, backquote, parentheses and comma" do
+    ast = @parser.parse_string("~1!2@3#4$%5^6&7*890-_+=|\]}[{poiuytrewqasdfghjklmnbvcxzZXCVBNMLKJHGFDSAQWERTYUIOP:;/?><")
+    assert_equal [:"~1!2@3#4$%5^6&7*890-_+=|\]}[{poiuytrewqasdfghjklmnbvcxzZXCVBNMLKJHGFDSAQWERTYUIOP:;/?><"], ast
+  end
     
 end
