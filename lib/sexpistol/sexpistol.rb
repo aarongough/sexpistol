@@ -22,7 +22,7 @@ class Sexpistol
   # of open and closing parentheses match
   def check_tokens( tokens )
     unless( (tokens.reject {|x| x == "("}).length == (tokens.reject {|x| x == ")"}).length)
-      raise Exception, "Invalid S-Expression. The number of opening and closing parentheses do not match."
+      raise Exception, "Invalid S-Expression. The number of opening and closing parentheses does not match."
     end
   end
 
@@ -77,12 +77,12 @@ class Sexpistol
     string_literals = []
     string.gsub(string_literal_pattern) {|x| string_literals << x}
     # Replace all the string literals with a special token
-    string = string.gsub(string_literal_pattern, string_token )
-    # Split the string up on whitespace
+    string = string.gsub(string_literal_pattern, string_token)
+    # Split the string up on whitespace and parentheses
     string.gsub!("(", " ( ")
     string.gsub!(")", " ) ")
     array = string.split(" ")
-    # replace the special string token with the original strings
+    # replace the special string token with the original string literals
     array.collect! do |x|
       if( x == string_token)
         string_literals.shift
