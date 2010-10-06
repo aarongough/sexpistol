@@ -6,11 +6,11 @@ class BenchmarkTest < Test::Unit::TestCase
 
   test "benchmark sexpistol" do
     puts "\nRunning performance test...\n"
+    parser = Sexpistol.new
+    parser.ruby_keyword_literals = true
     Benchmark.bmbm do |b|
       b.report do
         5000.times do
-          parser = Sexpistol.new
-          parser.ruby_keyword_literals = true
           parser.parse_string <<-EOD
           
             (display "This is a test string!")
