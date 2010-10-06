@@ -16,6 +16,8 @@ class Sexpistol
     @integer_literal_pattern = /[\-\+]?[0-9]+/
     @float_literal_pattern = /[\-\+]?[0-9]+\.[0-9]+(e[0-9]+)?/
     @symbol_pattern = /[^\"\'\,\(\)]+/
+    
+    @string_replacement_token = "__++STRING_LITERAL++__"
   end
 
   # Parse a string containing an S-Expression into a
@@ -23,16 +25,7 @@ class Sexpistol
   def parse_string( string )
     string_array = split_outside_strings(string)
     tokens = process_tokens( string_array )
-    check_tokens( tokens )
-    structure( tokens )
-  end
-  
-  # Check and array of tokens to make sure that the number
-  # of open and closing parentheses match
-  def check_tokens( tokens )
-    unless( (tokens.reject {|x| x == "("}).length == (tokens.reject {|x| x == ")"}).length)
-      raise Exception, "Invalid S-Expression. The number of opening and closing parentheses does not match."
-    end
+    structure( tokens )[1]
   end
 
   # Iterate over an array of strings and turn each
@@ -70,28 +63,27 @@ class Sexpistol
       end
       offset += 1
     end
-    if(internal)
-      return [offset, program]
-    else
-      return program
-    end
+    return [offset, program]
   end
   
   # Split up a string into an array where delimited by whitespace,
   # except inside string literals
   def split_outside_strings( string )
-    string_token = "__++STRING_LITERAL++__"
     # Find and extract all the string literals
     string_literals = []
     string = string.gsub(@string_literal_pattern) do |x| 
       string_literals << x
-      string_token
+      @string_replacement_token
+    end
+    # Make sure the s-expression is valid
+    unless( string.count("(") == string.count(")") )
+      raise Exception, "Invalid S-Expression. The number of opening and closing parentheses does not match."
     end
     # Split the string up on whitespace and parentheses
     array = string.gsub("(", " ( ").gsub(")", " ) ").split(" ")
     # replace the special string token with the original string literals
     array.collect! do |x|
-      if( x == string_token)
+      if( x == @string_replacement_token)
         string_literals.shift
       else
         x
