@@ -83,13 +83,12 @@ class Sexpistol
     string_token = "__++STRING_LITERAL++__"
     # Find and extract all the string literals
     string_literals = []
-    string.gsub(@string_literal_pattern) {|x| string_literals << x}
-    # Replace all the string literals with a special token
-    string = string.gsub(@string_literal_pattern, string_token)
+    string = string.gsub(@string_literal_pattern) do |x| 
+      string_literals << x
+      string_token
+    end
     # Split the string up on whitespace and parentheses
-    string.gsub!("(", " ( ")
-    string.gsub!(")", " ) ")
-    array = string.split(" ")
+    array = string.gsub("(", " ( ").gsub(")", " ) ").split(" ")
     # replace the special string token with the original string literals
     array.collect! do |x|
       if( x == string_token)
