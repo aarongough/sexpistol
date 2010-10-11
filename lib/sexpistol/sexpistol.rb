@@ -118,20 +118,30 @@ class Sexpistol
   
   # Convert a set of nested arrays back into an S-Expression
   def to_sexp( data )
-    mapped = data.map do |item|
-      if( item.is_a?(Array))
-        to_sexp(item)
-      else
-        if(item === false)
-          "#f"
-        elsif(item === true)
-          "#t"
+    if( data.is_a?(Array))
+      mapped = data.map do |item|
+        if( item.is_a?(Array))
+          to_sexp(item)
         else
-          item.to_s
+          if(item === false)
+            "#f"
+          elsif(item === true)
+            "#t"
+          else
+            item.to_s
+          end
         end
       end
+      "(" + mapped.join(" ") + ")"
+    else
+      if(data === false)
+        "#f"
+      elsif(data === true)
+        "#t"
+      else
+        data.to_s
+      end
     end
-    "(" + mapped.join(" ") + ")"
   end
 
   private

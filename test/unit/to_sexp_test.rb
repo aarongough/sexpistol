@@ -23,5 +23,29 @@ class ToSexpTest < Test::Unit::TestCase
     sexp = @parser.to_sexp(ast)
     assert_equal "(#t (#f (#t #f)))", sexp
   end
+  
+  test "when not passed array to_sexp should print value (integer)" do
+    ast = 1
+    sexp = @parser.to_sexp(ast)
+    assert_equal "1", sexp
+  end
+  
+  test "when not passed array to_sexp should print value (string)" do
+    ast = "test"
+    sexp = @parser.to_sexp(ast)
+    assert_equal "test", sexp
+  end
+  
+  test "when not passed array to_sexp should print value (symbol)" do
+    ast = :test
+    sexp = @parser.to_sexp(ast)
+    assert_equal "test", sexp
+  end
+  
+  test "lists passed to to_sexp should have not extraneous spaces" do
+    ast = [1, 2, 3]
+    sexp = @parser.to_sexp(ast)
+    assert_equal "(1 2 3)", sexp
+  end
     
 end
