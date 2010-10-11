@@ -122,10 +122,16 @@ class Sexpistol
       if( item.is_a?(Array))
         to_sexp(item)
       else
-        item.to_s
+        if(item === false)
+          "#f"
+        elsif(item === true)
+          "#t"
+        else
+          item.to_s
+        end
       end
     end
-    "( " + mapped.join(" ") + " )"
+    "(" + mapped.join(" ") + ")"
   end
 
   private
