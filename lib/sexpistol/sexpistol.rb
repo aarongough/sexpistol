@@ -38,6 +38,7 @@ class Sexpistol
         tokens << true and next if(t == "true")
         tokens << false and next if(t == "false")
       end
+      tokens << "'" and next if(t == "'")
       tokens << t and next if(t == "(" || t == ")")
       tokens << t.to_f and next if( is_float?(t))
       tokens << t.to_i and next if( is_integer?(t))
@@ -56,6 +57,9 @@ class Sexpistol
       if( token_array[offset] == "(" )
         offset, array = structure( token_array, offset + 1, true )
         program << array
+      elsif( token_array[offset] == "'" )  
+        offset, array = structure( token_array, offset + 1, true )
+        program << array.unshift( :quote )
       elsif( token_array[offset] == ")" )
         break  
       else
@@ -118,10 +122,16 @@ class Sexpistol
       if( item.is_a?(Array))
         to_sexp(item)
       else
-        item.to_s
+        if(item === false)
+          "#f"
+        elsif(item === true)
+          "#t"
+        else
+          item.to_s
+        end
       end
     end
-    "( " + mapped.join(" ") + " )"
+    "(" + mapped.join(" ") + ")"
   end
 
   private

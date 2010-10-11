@@ -9,7 +9,19 @@ class ToSexpTest < Test::Unit::TestCase
   test "should convert nested arrays back into an S-Expression" do
     ast = [:string, [:is, [:parsed]]]
     sexp = @parser.to_sexp(ast)
-    assert_equal "( string ( is ( parsed ) ) )", sexp
+    assert_equal "(string (is (parsed)))", sexp
+  end
+  
+  test "should structure containing integers and strings back into an S-Expression" do
+    ast = ["String!", [1, [2, "Other string."]]]
+    sexp = @parser.to_sexp(ast)
+    assert_equal "(String! (1 (2 Other string.)))", sexp
+  end
+  
+  test "should output true and false using scheme notation" do
+    ast = [true, [false, [true, false]]]
+    sexp = @parser.to_sexp(ast)
+    assert_equal "(#t (#f (#t #f)))", sexp
   end
     
 end

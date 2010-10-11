@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'test_helper.rb'))
 
-class RubyKeywordLiteralsTest < Test::Unit::TestCase
+class StructureTest < Test::Unit::TestCase
 
   def setup
     @parser = Sexpistol.new
@@ -20,6 +20,11 @@ class RubyKeywordLiteralsTest < Test::Unit::TestCase
     assert_raises Exception do
       ast = @parser.parse_string('(this (is (an (s_expression) too)')
     end
+  end
+  
+  test "should parser () as empty list" do
+    ast = @parser.parse_string('()')
+    assert_equal [[]], ast
   end
     
 end
