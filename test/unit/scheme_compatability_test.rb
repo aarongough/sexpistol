@@ -7,13 +7,13 @@ class SchemeCompatabilityTest < Test::Unit::TestCase
   end
 
   test "should parse #t as true" do
-    ast = @parser.parse_string('#t')
-    assert_equal [:"#t"], ast
+    ast = @parser.parse_string('(#t)')
+    assert_equal [[:"#t"]], ast
   end
   
   test "should parse #f as false" do
-    ast = @parser.parse_string('#f')
-    assert_equal [:"#f"], ast
+    ast = @parser.parse_string('(#f)')
+    assert_equal [[:"#f"]], ast
   end
   
   test "should allow comma quoting" do
