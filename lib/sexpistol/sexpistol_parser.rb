@@ -18,7 +18,10 @@ class SexpistolParser < StringScanner
         when ')'
           break
         when :"'"
-          exp << [:quote].concat(parse)
+          case fetch_token
+          when '(' then exp << [:quote].concat([parse])
+          else exp << [:quote, @token]
+          end
         when String, Fixnum, Float, Symbol 
           exp << @token
         when nil 
@@ -45,6 +48,9 @@ class SexpistolParser < StringScanner
     # Match an integer literal
     elsif scan(/[\-\+]?[0-9]+/)
       matched.to_i
+    # Match a comma (for comma quoting)
+    elsif scan(/'/)
+      matched.to_sym
     # Match a symbol
     elsif scan(/[^\(\)\s]+/)
       matched.to_sym

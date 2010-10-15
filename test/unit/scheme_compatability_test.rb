@@ -18,13 +18,23 @@ class SchemeCompatabilityTest < Test::Unit::TestCase
   end
   
   test "should allow comma quoting" do
-    ast = @parser.parse_string("(this is '( a test) too)")
-    assert_equal [[:this, :is, [:quote, [:a, :test]], :too ]], ast
+    ast = @parser.parse_string("(this is '( a test) too foo)(foo)")
+    assert_equal [[:this, :is, [:quote, [:a, :test]], :too, :foo ],[:foo]], ast
   end
   
   test "should allow complicated comma quoting" do
     ast = @parser.parse_string("(this is '( a test) (also))")
     assert_equal [[:this, :is, [:quote, [:a, :test]], [:also]]], ast
+  end
+  
+  test "should allow comma quoting of integer literal" do
+    ast = @parser.parse_string("(this is '1 (also))")
+    assert_equal [[:this, :is, [:quote, 1], [:also]]], ast
+  end
+  
+  test "should allow comma quoting of string literal" do
+    ast = @parser.parse_string("(this is '\"test\" (also))")
+    assert_equal [[:this, :is, [:quote, "test"], [:also]]], ast
   end
   
   test "should return scheme compatible external representation" do
