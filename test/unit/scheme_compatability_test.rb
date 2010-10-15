@@ -4,26 +4,33 @@ class SchemeCompatabilityTest < Test::Unit::TestCase
 
   def setup
     @parser = Sexpistol.new
+    @parser.scheme_compatability = true
   end
 
-  test "should parse #t as true" do
+  test "should parse #t as symbol" do
     ast = @parser.parse_string('(#t)')
     assert_equal [[:"#t"]], ast
   end
   
-  test "should parse #f as false" do
+  test "should parse #f as symbol" do
     ast = @parser.parse_string('(#f)')
     assert_equal [[:"#f"]], ast
   end
   
   test "should allow comma quoting" do
-    ast = @parser.parse_string("(this is '( a test))")
-    assert_equal [[:this, :is, [:quote, [:a, :test]]]], ast
+    ast = @parser.parse_string("(this is '( a test) too)")
+    assert_equal [[:this, :is, [:quote, [:a, :test]], :too ]], ast
   end
   
   test "should allow complicated comma quoting" do
-    ast = @parser.parse_string("(this is '( a test (also)))")
-    assert_equal [[:this, :is, [:quote, [:a, :test, [:also]]]]], ast
+    ast = @parser.parse_string("(this is '( a test) (also))")
+    assert_equal [[:this, :is, [:quote, [:a, :test]], [:also]]], ast
+  end
+  
+  test "should return scheme compatible external representation" do
+    ast = [true, false, nil]
+    string = @parser.to_sexp(ast)
+    assert_equal "(#t #f ())", string
   end
     
 end

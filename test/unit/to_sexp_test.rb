@@ -18,10 +18,10 @@ class ToSexpTest < Test::Unit::TestCase
     assert_equal "(String! (1 (2 Other string.)))", sexp
   end
   
-  test "should output true and false using scheme notation" do
+  test "should not output true and false using scheme notation when scheme compat is off" do
     ast = [true, [false, [true, false]]]
     sexp = @parser.to_sexp(ast)
-    assert_equal "(#t (#f (#t #f)))", sexp
+    assert_equal "(true (false (true false)))", sexp
   end
   
   test "when not passed array to_sexp should print value (integer)" do
