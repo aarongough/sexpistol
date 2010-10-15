@@ -69,7 +69,7 @@ class Sexpistol
           end
         end
       else
-        block.call(x)
+        block.call(data)
       end
     end
   
