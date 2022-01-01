@@ -39,12 +39,10 @@ Sexpistol supports all of the standard datatypes and converts them directly to t
 Sexpistol also supports mapping the Ruby keyword literals (`nil`, `true`, `false`) to their native Ruby types, although this is disabled by default for compatibility. To enable it use `@parser.ruby_keyword_literals = true`, eg:
  
 ```ruby 
-@parser = Sexpistol.new
-@parser.parse_string("nil false true")
+Sexpistol.parse("nil false true")
 #=> [:nil, :false, :true]
 
-@parser.ruby_keyword_literals = true
-@parser.parse_string("nil false true")
+Sexpistol.parse("nil false true", parse_ruby_keyword_literals: true)
 #=> [nil, false, true]
 ```
   
@@ -53,9 +51,7 @@ Sexpistol also supports mapping the Ruby keyword literals (`nil`, `true`, `false
 Above all Sexpistol strives to be compatible with Scheme-style S-Expressions. This means that Sexpistol supports comma quoting, though quasi-quoting is not yet implemented. Sexpistol can also generate Scheme compatible external representations when the 'scheme_compatability' options is set to true:
 
 ```ruby
-@parser = Sexpistol.new
-@parser.scheme_compatability = true
-@parser.to_sexp([:test, false, true, nil])
+Sexpistol.to_sexp([:test, false, true, nil], scheme_compatability: true)
 #=> "(test #f #t ())"
 ```
   
@@ -70,11 +66,8 @@ gem install sexpistol
 ### Usage:
 
 ```ruby
-# Create a new parser instance
-parser = Sexpistol.new
-
-# Parse a string
-ast = parser.parse_string("(string (to (parse)))")
+# Parse an s-expression
+ast = Sexpistol.parse("(string (to (parse)))")
 #=> [:string, [:to, [:parse]]]
 
 # Change the representation
@@ -83,7 +76,7 @@ ast[1][1][0] = :parsed
 #=> [:string, [:is, [:parsed]]]
 
 # Turn the array structure back into an S-Expression
-parser.to_sexp(ast)
+Sexpistol.to_sexp(ast)
 #=> "(string (is (parsed)))"
 ```
   
