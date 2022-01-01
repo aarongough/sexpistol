@@ -1,5 +1,3 @@
-
-
 # Sexpistol
 
 Sexpistol is a very fast and easy-to-use library for parsing S-Expressions in Ruby. Sexpistol takes an S-Expression in string form and turns it into a native Ruby data structure made up of nested sets of arrays.
@@ -91,7 +89,7 @@ ast[1][1][0] = :parsed
   
 ### Performance:
 
-The core of Sexpistol was recently re-written using StringScanner and the new version is roughly twice as fast as the older ones.
+The core of Sexpistol is written using StringScanner and the new version is roughly twice as fast as the older ones.
 
 Parsing throughput on my test machine (2Ghz Core 2 Duo, 4GB RAM, Ruby 1.9) is approximately 1 Megabytes/sec. This is fairly high given that Sexpistol is pure Ruby. Benchmarking Sexpistol against other popular S-Expression parser gems shows that it is roughly 8x faster than the nearest competitor.
 

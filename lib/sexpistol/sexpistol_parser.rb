@@ -22,7 +22,7 @@ class SexpistolParser < StringScanner
           when '(' then exp << [:quote].concat([parse])
           else exp << [:quote, @token]
           end
-        when String, Fixnum, Float, Symbol 
+        when String, Integer, Float, Symbol 
           exp << @token
         when nil 
           break
