@@ -71,10 +71,10 @@ gem install sexpistol
 
 ```ruby
 # Create a new parser instance
-@parser = Sexpistol.new
+parser = Sexpistol.new
 
 # Parse a string
-ast = @parser.parse_string("(string (to (parse)))")
+ast = parser.parse_string("(string (to (parse)))")
 #=> [:string, [:to, [:parse]]]
 
 # Change the representation
@@ -83,8 +83,8 @@ ast[1][1][0] = :parsed
 #=> [:string, [:is, [:parsed]]]
 
 # Turn the array structure back into an S-Expression
-@parser.to_sexp( ast )
-#=> "( string ( is ( parsed ) ) )"
+parser.to_sexp(ast)
+#=> "(string (is (parsed)))"
 ```
   
 ### Performance:

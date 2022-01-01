@@ -5,15 +5,15 @@ describe Sexpistol do
     let(:parser) { Sexpistol.new }
 
     it "should convert nested arrays back into an S-Expression" do
-      ast = [:string, [:is, [:parsed]]]
+      ast = [:symbol, [:is, [:parsed]]]
       sexp = parser.to_sexp(ast)
-      expect(sexp).to eq("(string (is (parsed)))")
+      expect(sexp).to eq("(symbol (is (parsed)))")
     end
     
     it "outputs structure containing integers and strings back into an S-Expression" do
       ast = ["String!", [1, [2, "Other string."]]]
       sexp = parser.to_sexp(ast)
-      expect(sexp).to eq("(String! (1 (2 Other string.)))")
+      expect(sexp).to eq('("String!" (1 (2 "Other string.")))')
     end
     
     it "should not output true and false using scheme notation when scheme compat is off" do
@@ -31,7 +31,7 @@ describe Sexpistol do
     it "outputs a string literal" do
       ast = "test"
       sexp = parser.to_sexp(ast)
-      expect(sexp).to eq("test")
+      expect(sexp).to eq('"test"')
     end
     
     it "outputs a symbol literal" do
@@ -45,5 +45,21 @@ describe Sexpistol do
       sexp = parser.to_sexp(ast)
       expect(sexp).to eq("(1 2 3)")
     end 
+
+    it "returns data in the exact form it was given" do
+      input = '("01qwerty")'
+      ast = parser.parse_string(input)
+      sexp = parser.to_sexp(ast)
+
+      expect(sexp).to eq('("01qwerty")')
+    end
+
+    it "returns multiple s-expressions in the exact form they were given" do
+      input = '("01qwerty") (test)'
+      ast = parser.parse_string(input)
+      sexp = parser.to_sexp(ast)
+
+      expect(sexp).to eq('("01qwerty") (test)')
+    end
   end
 end

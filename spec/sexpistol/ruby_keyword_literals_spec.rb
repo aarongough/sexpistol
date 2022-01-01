@@ -11,17 +11,17 @@ describe Sexpistol do
 
       it "parses nil as literal" do
         ast = parser.parse_string('(nil)')
-        expect(ast).to eq([[nil]])
+        expect(ast).to eq([nil])
       end
 
       it "parses true as literal" do
         ast = parser.parse_string('(true)')
-        expect(ast).to eq([[true]])
+        expect(ast).to eq([true])
       end   
       
       it "parses false as literal" do
         ast = parser.parse_string('(false)')
-        expect(ast).to eq([[false]])
+        expect(ast).to eq([false])
       end 
     end
 
@@ -32,18 +32,18 @@ describe Sexpistol do
       
       it "should not parse nil as literal" do
         ast = parser.parse_string('(nil)')
-        expect(ast).to eq([[:nil]])
+        expect(ast).to eq([:nil])
       end
       
       
       it "should not parse true as literal" do
         ast = parser.parse_string('(true)')
-        expect(ast).to eq([[:true]])
+        expect(ast).to eq([:true])
       end
       
       it "should notparse false as literal" do
         ast = parser.parse_string('(false)')
-        expect(ast).to eq([[:false]])
+        expect(ast).to eq([:false])
       end
     end
   end

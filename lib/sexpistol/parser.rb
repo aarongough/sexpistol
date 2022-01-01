@@ -1,25 +1,25 @@
 require 'strscan'	
 
-class SexpistolParser < StringScanner
+class Sexpistol::Parser < StringScanner
 
   def initialize(string)
-    unless(string.count('(') == string.count(')'))
-      raise Exception, "Missing closing parentheses"
-    end
+    raise "String given is not an s-expression" if string.strip[0] != '('
+    raise "Invalid s-expression" if string.count('(') != string.count(')') 
+    
     super(string)
   end
 
-  def parse
+  def parse(top_level = true)
     exp = []
     while true
       case fetch_token
         when '('
-          exp << parse
+          exp << parse(false)
         when ')'
           break
         when :"'"
           case fetch_token
-          when '(' then exp << [:quote].concat([parse])
+          when '(' then exp << [:quote].concat([parse(false)])
           else exp << [:quote, @token]
           end
         when String, Integer, Float, Symbol 
@@ -28,7 +28,10 @@ class SexpistolParser < StringScanner
           break
       end
     end
-    exp
+    
+    return exp.first if exp.first.is_a?(Array) && exp.length == 1
+    return Sexpistol::SExpressionArray.new(exp) if top_level && exp.all? {|item| item.is_a?(Array) }
+    return exp
   end
   
   def fetch_token
