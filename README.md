@@ -1,3 +1,6 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/a5ce9269a7b23614103c/maintainability)](https://codeclimate.com/github/aarongough/sexpistol/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a5ce9269a7b23614103c/test_coverage)](https://codeclimate.com/github/aarongough/sexpistol/test_coverage)
+
 # Sexpistol
 
 Sexpistol is a very fast and easy-to-use library for parsing S-Expressions in Ruby. Sexpistol takes an S-Expression in string form and turns it into a native Ruby data structure made up of nested sets of arrays.
