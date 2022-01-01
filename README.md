@@ -36,7 +36,7 @@ Sexpistol supports all of the standard datatypes and converts them directly to t
 - Strings ("\t\"Hello world!\"\n")
 - Symbols (symbol Symbol ____symbol____ symbo_l symbol? symbol! + - / ++ a+ e$, etc...)
 
-Sexpistol also supports mapping the Ruby keyword literals (`nil`, `true`, `false`) to their native Ruby types, although this is disabled by default for compatibility. To enable it use `@parser.ruby_keyword_literals = true`, eg:
+Sexpistol also supports mapping the Ruby keyword literals (`nil`, `true`, `false`) to their native Ruby types, although this is disabled by default for compatibility. To enable it use `parse_ruby_keyword_literals: true`, eg:
  
 ```ruby 
 Sexpistol.parse("nil false true")
