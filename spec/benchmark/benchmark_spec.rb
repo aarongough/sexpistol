@@ -21,20 +21,17 @@ describe Sexpistol do
     it "benchmarks sexpistol" do
       puts "\nRunning performance test...\n"
       
-      parser = Sexpistol.new
-      parser.ruby_keyword_literals = true
-      
       Benchmark.bmbm do |b|
         b.report("Parse") do
           5000.times do
-            parser.parse_string(example_sexp)
+            Sexpistol.parse(example_sexp, parse_ruby_keyword_literals: true)
           end
         end
         
         b.report("to_sexp") do
-          ast = parser.parse_string(example_sexp)
+          ast = Sexpistol.parse(example_sexp, parse_ruby_keyword_literals: true)
           5000.times do
-            parser.to_sexp(ast)
+            Sexpistol.to_sexp(ast)
           end
         end
       end

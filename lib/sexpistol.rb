@@ -2,25 +2,16 @@ require "sexpistol/parser.rb"
 require "sexpistol/version.rb"
 require "sexpistol/s_expression_array.rb"
 
-# This class contains our logic for parsing
-# S-Expressions. They are turned into a 
-# native Ruby representation like:
-#   [:def, :something [:lambda, [:a], [:do_something]]]
 class Sexpistol
-
-  attr_accessor :ruby_keyword_literals, :scheme_compatability
-
-  # Parse a string containing an S-Expression into a
-  # nested set of Ruby arrays
-  def parse_string(string)
+  def self.parse(string, parse_ruby_keyword_literals: false)
     tree = Sexpistol::Parser.new(string).parse
-    return convert_ruby_keyword_literals(tree) if(@ruby_keyword_literals)
+    return convert_ruby_keyword_literals(tree) if(parse_ruby_keyword_literals)
     return tree
   end
 
   # Convert symbols corresponding to Ruby's keyword literals
   # into their literal forms
-  def convert_ruby_keyword_literals(expression)
+  def self.convert_ruby_keyword_literals(expression)
     return recursive_map(expression) do |x|
       case x
         when :'nil' then nil
@@ -33,7 +24,7 @@ class Sexpistol
   
   # Convert nil, true and false into (), #t and #f for compatability
   # with Scheme
-  def convert_scheme_literals(data)
+  def self.convert_scheme_literals(data)
     return recursive_map(data) do |x|
       case x
         when nil then []
@@ -45,8 +36,8 @@ class Sexpistol
   end
   
   # Convert a set of nested arrays back into an S-Expression
-  def to_sexp(data)
-    data = convert_scheme_literals(data) if(@scheme_compatability)
+  def self.to_sexp(data, scheme_compatability: false)
+    data = convert_scheme_literals(data) if(scheme_compatability)
     if( data.is_a?(Array))
       mapped = data.map do |item|
         if( item.is_a?(Array))
@@ -64,7 +55,7 @@ class Sexpistol
   
   private
   
-    def recursive_map(data, &block)
+    def self.recursive_map(data, &block)
       if(data.is_a?(Array))
         return data.map do |x|
           if(x.is_a?(Array))
