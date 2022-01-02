@@ -4,7 +4,7 @@ describe Sexpistol do
   describe "String Literal Parsing" do
     it "parses empty string literal" do
       ast = Sexpistol.parse('("")')
-      expect(ast).to eq([""])
+      expect(ast).to eq([''])
     end
 
     it "parses string literal" do
@@ -14,7 +14,7 @@ describe Sexpistol do
     
     it "parses string literal containing escaped quotes" do
       ast = Sexpistol.parse('("te\"st")')
-      expect(ast).to eq(["te\"st"])
+      expect(ast).to eq(['te"st'])
     end
     
     it "parses string literal containing escaped characters" do

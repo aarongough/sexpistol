@@ -9,10 +9,8 @@ class Sexpistol
     return tree
   end
 
-  # Convert symbols corresponding to Ruby's keyword literals
-  # into their literal forms
   def self.convert_ruby_keyword_literals(expression)
-    return recursive_map(expression) do |x|
+    recursive_map(expression) do |x|
       case x
         when :'nil' then nil
         when :'true' then true
@@ -22,10 +20,8 @@ class Sexpistol
     end
   end
   
-  # Convert nil, true and false into (), #t and #f for compatability
-  # with Scheme
   def self.convert_scheme_literals(data)
-    return recursive_map(data) do |x|
+    recursive_map(data) do |x|
       case x
         when nil then []
         when true then :"#t"

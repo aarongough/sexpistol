@@ -42,10 +42,10 @@ Sexpistol supports all of the standard datatypes and converts them directly to t
 Sexpistol also supports mapping the Ruby keyword literals (`nil`, `true`, `false`) to their native Ruby types, although this is disabled by default for compatibility. To enable it use `parse_ruby_keyword_literals: true`, eg:
  
 ```ruby 
-Sexpistol.parse("nil false true")
+Sexpistol.parse("(nil false true)")
 #=> [:nil, :false, :true]
 
-Sexpistol.parse("nil false true", parse_ruby_keyword_literals: true)
+Sexpistol.parse("(nil false true)", parse_ruby_keyword_literals: true)
 #=> [nil, false, true]
 ```
   

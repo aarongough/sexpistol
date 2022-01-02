@@ -61,9 +61,9 @@ describe Sexpistol do
     end
 
     it "returns a scheme compatible external representation" do
-      ast = [true, false, nil]
+      ast = [true, false, :quote, nil]
       string = Sexpistol.to_sexp(ast, scheme_compatability: true)
-      expect(string).to eq("(#t #f ())")
+      expect(string).to eq("(#t #f '())")
     end 
   end
 end
