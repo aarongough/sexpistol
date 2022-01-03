@@ -137,6 +137,11 @@ describe Sexpistol do
         expect(ast).to eq([:this, [:is, [:an, ['s_expression']]]])
       end
 
+      it 'parses () as empty list' do
+        ast = Sexpistol.parse('()')
+        expect(ast).to eq([])
+      end
+
       it 'raises an error on broken s-expression' do
         expect do
           Sexpistol.parse('(this (is (a (broken (s_expression))')
@@ -149,31 +154,10 @@ describe Sexpistol do
         end.to raise_error('String given is not an s-expression')
       end
 
-      it 'parses () as empty list' do
-        ast = Sexpistol.parse('()')
-        expect(ast).to eq([])
-      end
-    end
-
-    describe 'parsing comma quotes' do
-      it 'allows comma quoting' do
-        ast = Sexpistol.parse("(this is '(a test) too foo)(foo)")
-        expect(ast).to eq([[:this, :is, [:quote, %i[a test]], :too, :foo], [:foo]])
-      end
-
-      it 'allows complicated comma quoting' do
-        ast = Sexpistol.parse("(this is '(a test) (also))")
-        expect(ast).to eq([:this, :is, [:quote, %i[a test]], [:also]])
-      end
-
-      it 'allows comma quoting of integer literal' do
-        ast = Sexpistol.parse("(this is '1 (also))")
-        expect(ast).to eq([:this, :is, [:quote, 1], [:also]])
-      end
-
-      it 'allows comma quoting of string literal' do
-        ast = Sexpistol.parse("(this is '\"test\" (also))")
-        expect(ast).to eq([:this, :is, [:quote, 'test'], [:also]])
+      it 'raises an error when given an input with invalid tokens' do
+        expect do
+          Sexpistol.parse('(199AB)')
+        end.to raise_error("Invalid token at position 1 near '199AB)'.")
       end
     end
 
@@ -321,9 +305,9 @@ describe Sexpistol do
     end
 
     it 'returns a scheme compatible external representation' do
-      ast = [true, false, :quote, nil]
+      ast = [true, false, nil]
       string = Sexpistol.to_sexp(ast, scheme_compatability: true)
-      expect(string).to eq("(#t #f ' ())")
+      expect(string).to eq('(#t #f ())')
     end
   end
 
@@ -347,10 +331,6 @@ describe Sexpistol do
 
     it 'converts nil to []' do
       expect(Sexpistol.convert_scheme_literals(nil)).to eq([])
-    end
-
-    it "converts :quote to '" do
-      expect(Sexpistol.convert_scheme_literals(:quote)).to eq(:"'")
     end
   end
 

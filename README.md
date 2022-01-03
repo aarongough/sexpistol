@@ -71,7 +71,7 @@ Sexpistol.parse("(nil false true)", parse_ruby_keyword_literals: true)
   
 ### Scheme compatibility:
 
-Above all Sexpistol strives to be compatible with Scheme-style S-Expressions. This means that Sexpistol supports comma quoting, though quasi-quoting is not yet implemented. Sexpistol can also generate Scheme compatible external representations when the 'scheme_compatability' options is set to true:
+Sexpistol strives to be compatible with Scheme-style S-Expressions. Sexpistol can generate Scheme compatible external representations when the 'scheme_compatability' option is set to true:
 
 ```ruby
 Sexpistol.to_sexp([:test, false, true, nil], scheme_compatability: true)

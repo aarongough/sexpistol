@@ -18,13 +18,11 @@ class Sexpistol
     return "\"#{data}\"" if data.is_a?(String)
     return data.to_s unless data.is_a?(Array)
 
-    if data.is_a?(Sexpistol::SExpressionArray)
-      return data.map do |x|
-               to_sexp(x, scheme_compatability: scheme_compatability)
-             end.join(' ')
+    if data.is_a?(SExpressionArray)
+      data.map { |x| to_sexp(x, scheme_compatability: scheme_compatability) }.join(' ')
+    else
+      "(#{data.map { |x| to_sexp(x, scheme_compatability: scheme_compatability) }.join(' ')})"
     end
-
-    "(#{data.map { |x| to_sexp(x, scheme_compatability: scheme_compatability) }.join(' ')})"
   end
 
   def self.convert_ruby_keyword_literals(expression)
@@ -43,7 +41,6 @@ class Sexpistol
     when nil then []
     when true then :'#t'
     when false then :'#f'
-    when :quote then :"'"
     else data
     end
   end
