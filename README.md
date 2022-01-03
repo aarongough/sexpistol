@@ -79,7 +79,7 @@ Sexpistol supports all of the standard datatypes and converts them directly to t
 - Integers (1 2 3) -> `[1, 2, 3]`
 - Floats (1.0 42.9 3e6 1.2e2) -> `[1.0, 42.9, 3e6, 1.2e2]`
 - Strings ("\t\"Hello world!\"\n") -> `["\t\"Hello world!\"\n"]`
-- Symbols (symbol __symbol__ symbol? + - / ++ a+ e$, etc...) -> `[:symbol, :__symbol__, :symbol?, :+, :-, :/, :++, :a+, :'e$', :'etc...']`
+- Symbols (symbol symbol? + - a+ e$, etc...) -> `[:symbol, :symbol?, :+, :-, :a+, :'e$', :'etc...']`
 
 Sexpistol also supports mapping the Ruby keyword literals (`nil`, `true`, `false`) to their native Ruby types, although this is disabled by default for compatibility. To enable it use `parse_ruby_keyword_literals: true`, eg:
  
@@ -96,8 +96,11 @@ Sexpistol.parse("(nil false true)", parse_ruby_keyword_literals: true)
 Sexpistol strives to be compatible with Scheme-style S-Expressions. Sexpistol can generate Scheme compatible external representations when the 'scheme_compatability' option is set to true:
 
 ```ruby
-Sexpistol.to_sexp([:test, false, true, nil], scheme_compatability: true)
-#=> "(test #f #t ())"
+Sexpistol.to_sexp([true, false, nil])
+#=> "(true false nil)"
+
+Sexpistol.to_sexp([true, false, nil], scheme_compatability: true)
+#=> "(#t #f ())"
 ```
   
 ### Installation:
