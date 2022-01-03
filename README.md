@@ -132,4 +132,4 @@ Contributions are always welcome! Please create a pull request that clearly outl
 Author: [Aaron Gough](mailto:aaron@aarongough.com)
 Contributors: [Shane Hanna](http://github.com/shanna)
 
-Copyright © 2021 [Aaron Gough](http://thingsaaronmade.com/), released under the MIT license
+Copyright © 2022 [Aaron Gough](http://thingsaaronmade.com/), released under the MIT license
