@@ -52,19 +52,23 @@ Sexpistol.to_sexp(ast)
 ### API:
 ```ruby
 Sexpistol.parse(string, parse_ruby_keyword_literals: false)
-# Parse an s-expression given as a string. Optionally convert ruby keyword literals to their native Ruby equivalents.
+# Parse an s-expression given as a string. Optionally convert 
+# ruby keyword literals to their native Ruby equivalents.
 
 Sexpistol.to_sexp(structure, scheme_compatability: false)
-# Output a nested set of arrays as an s-expression. Optionally output `true, false, nil` as their Scheme literal equivalents.
+# Output a nested set of arrays as an s-expression. Optionally 
+# output `true, false, nil` as their Scheme literal equivalents.
 
 Sexpistol.convert_ruby_keyword_literals(data)
-# Recursively maps over a nested array structure and converts any instances of :nil, :true, :false to their native Ruby equivalents.
+# Recursively maps over a nested array structure and converts 
+# any instances of :nil, :true, :false to their native Ruby equivalents.
 
 Sexpistol.convert_scheme_literals(data)
 # Converts Ruby literals to their equivalent Scheme literals
 
 Sexpistol.recursive_map(data, &block)
-# Recursively map over a nested set of arrays, applying the block to each item and returning the result.
+# Recursively map over a nested set of arrays, applying the block 
+# to each item and returning the result.
 ```
   
 ### Type mappings:
@@ -104,11 +108,21 @@ Add Sexpistol to your gemfile:
 gem 'sexpistol', '~>0.10.0'
 ```
 
+And then execute:
+
+```
+bundle install
+```
+
 Or install it manually by entering the following at your command line:
 
 ```
 gem install sexpistol
 ```
+
+### Contributing:
+
+Contributions are always welcome! Please create a pull request that clearly outlines the work you've done. Make sure your changes include updating or adding relevant tests, and use [Rubocop](https://github.com/rubocop/rubocop) to make sure your additions adhere to the same style as the rest of the project!
 
 ### Author & Credits:
 
