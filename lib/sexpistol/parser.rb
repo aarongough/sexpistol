@@ -16,43 +16,39 @@ class Sexpistol::Parser < StringScanner
     super(string)
   end
 
-  def parse(top_level = true)
+  def parse(level = 0)
     exp = []
-    while true
+    while !eos?
       case token = fetch_token
-        when '('
-          exp << parse(false)
-        when ')'
-          break
+        when ')' then break
+        when '(' then exp << parse(level + 1)
         when :"'"
           case token = fetch_token
-          when '(' then exp << [:quote, parse(false)]
+          when '(' then exp << [:quote, parse]
           else exp << [:quote, token]
           end
-        when String, Integer, Float, Symbol 
-          exp << token
-        when nil 
-          break
+        when String, Integer, Float, Symbol then exp << token
       end
     end
-    
-    return exp.first if exp.first.is_a?(Array) && exp.length == 1
-    return Sexpistol::SExpressionArray.new(exp) if top_level && exp.all? {|item| item.is_a?(Array) }
+
+    if level == 0
+      exp = exp.first if exp.first.is_a?(Array) && exp.length == 1
+      exp = Sexpistol::SExpressionArray.new(exp) if exp.all? {|item| item.is_a?(Array) }
+    end
+
     return exp
   end
   
   def fetch_token
     skip(/\s+/)
 
-    return nil            if(eos?)
+    return if eos?
     return matched        if scan(PARANTHESES)
-    return matched[1..-2] if scan(STRING_LITERAL)
+    return matched.undump if scan(STRING_LITERAL)
     return matched.to_f   if scan(FLOAT_LITERAL)
     return matched.to_i   if scan(INTEGER_LITERAL)
-    return matched.to_sym if scan(COMMA_QUOTE)
-    return matched.to_sym if scan(SYMBOL_LITERAL)
+    return matched.to_sym if scan(COMMA_QUOTE) || scan(SYMBOL_LITERAL)
 
     raise "Invalid token at position #{pos} near '#{scan(/.{0,20}/)}'."
   end
-
 end

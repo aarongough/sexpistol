@@ -9,60 +9,39 @@ class Sexpistol
     return tree
   end
 
+  def self.to_sexp(data, scheme_compatability: false)
+  	data = convert_scheme_literals(data) if scheme_compatability
+
+  	return "\"#{data}\"" if data.is_a?(String)
+  	return data.to_s unless data.is_a?(Array)
+  	return data.map {|x| to_sexp(x, scheme_compatability: scheme_compatability) }.join(" ") if data.is_a?(Sexpistol::SExpressionArray)
+
+  	"(" + data.map {|x| to_sexp(x, scheme_compatability: scheme_compatability) }.join(" ") + ")"
+  end
+
   def self.convert_ruby_keyword_literals(expression)
     recursive_map(expression) do |x|
       case x
-        when :'nil' then nil
-        when :'true' then true
-        when :'false' then false
+        when :nil then nil
+        when :true then true
+        when :false then false
         else x
       end
     end
   end
   
   def self.convert_scheme_literals(data)
-    recursive_map(data) do |x|
-      case x
-        when nil then []
-        when true then :"#t"
-        when false then :"#f"
-        else x
-      end
-     end
-  end
-  
-  # Convert a set of nested arrays back into an S-Expression
-  def self.to_sexp(data, scheme_compatability: false)
-    data = convert_scheme_literals(data) if(scheme_compatability)
-    if( data.is_a?(Array))
-      mapped = data.map do |item|
-        if( item.is_a?(Array))
-          to_sexp(item)
-        else
-          item.is_a?(String) ? "\"#{item}\"" : item.to_s
-        end
-      end
-      return mapped.join(" ") if data.is_a?(Sexpistol::SExpressionArray)
-      "(" + mapped.join(" ") + ")"
-    else
-      data.is_a?(String) ? "\"#{data}\"" : data.to_s
+    case data
+      when nil then []
+      when true then :"#t"
+      when false then :"#f"
+    	when :quote then :"'"
+      else data
     end
   end
   
-  private
-  
-    def self.recursive_map(data, &block)
-      if(data.is_a?(Array))
-        return data.map do |x|
-          if(x.is_a?(Array))
-            recursive_map(x, &block)
-          else
-            block.call(x)
-          end
-        end
-      else
-        block.call(data)
-      end
-    end
-  
+  def self.recursive_map(data, &block)
+  	return data.map {|x| recursive_map(x, &block) } if data.is_a?(Array)
+  	block.call(data)
+  end
 end
