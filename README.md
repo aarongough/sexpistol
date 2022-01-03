@@ -48,16 +48,34 @@ ast[1][1][0] = :parsed
 Sexpistol.to_sexp(ast)
 #=> "(string (is (parsed)))"
 ```
+
+### API:
+```ruby
+Sexpistol.parse(string, parse_ruby_keyword_literals: false)
+# Parse an s-expression given as a string. Optionally convert ruby keyword literals to their native Ruby equivalents.
+
+Sexpistol.to_sexp(structure, scheme_compatability: false)
+# Output a nested set of arrays as an s-expression. Optionally output `true, false, nil` as their Scheme literal equivalents.
+
+Sexpistol.convert_ruby_keyword_literals(data)
+# Recursively maps over a nested array structure and converts any instances of :nil, :true, :false to their native Ruby equivalents.
+
+Sexpistol.convert_scheme_literals(data)
+# Converts Ruby literals to their equivalent Scheme literals
+
+Sexpistol.recursive_map(data, &block)
+# Recursively map over a nested set of arrays, applying the block to each item and returning the result.
+```
   
 ### Type mappings:
 
 Sexpistol supports all of the standard datatypes and converts them directly to their Ruby equivalents:
 
-- Lists (a b c)
-- Integers (1 2 3)
-- Floats (1.0 2.0 42.9 3e6 1.2e2)
-- Strings ("\t\"Hello world!\"\n")
-- Symbols (symbol Symbol ____symbol____ symbo_l symbol? symbol! + - / ++ a+ e$, etc...)
+- Lists (a b c) -> `[:a, :b, :c]`
+- Integers (1 2 3) -> `[1, 2, 3]`
+- Floats (1.0 42.9 3e6 1.2e2) -> `[1.0, 42.9, 3e6, 1.2e2]`
+- Strings ("\t\"Hello world!\"\n") -> `["\t\"Hello world!\"\n"]`
+- Symbols (symbol __symbol__ symbol? + - / ++ a+ e$, etc...) -> `[:symbol, :__symbol__, :symbol?, :+, :-, :/, :++, :a+, :'e$', :'etc...']`
 
 Sexpistol also supports mapping the Ruby keyword literals (`nil`, `true`, `false`) to their native Ruby types, although this is disabled by default for compatibility. To enable it use `parse_ruby_keyword_literals: true`, eg:
  
@@ -80,17 +98,17 @@ Sexpistol.to_sexp([:test, false, true, nil], scheme_compatability: true)
   
 ### Installation:
 
-For convenience Sexpistol is packaged as a RubyGem, to install it simply enter the following at your command line:
+Add Sexpistol to your gemfile:
+
+```ruby
+gem 'sexpistol', '~>0.10.0'
+```
+
+Or install it manually by entering the following at your command line:
 
 ```
 gem install sexpistol
 ```
-  
-### Performance:
-
-The core of Sexpistol is written using StringScanner and the new version is roughly twice as fast as the older ones.
-
-Parsing throughput on my test machine (2Ghz Core 2 Duo, 4GB RAM, Ruby 1.9) is approximately 1 Megabytes/sec. This is fairly high given that Sexpistol is pure Ruby. Benchmarking Sexpistol against other popular S-Expression parser gems shows that it is roughly 8x faster than the nearest competitor.
 
 ### Author & Credits:
 
