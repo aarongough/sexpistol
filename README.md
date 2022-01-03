@@ -1,6 +1,8 @@
+[![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
 ![Actions Status](https://github.com/aarongough/sexpistol/actions/workflows/ruby.yml/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/a5ce9269a7b23614103c/maintainability)](https://codeclimate.com/github/aarongough/sexpistol/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a5ce9269a7b23614103c/test_coverage)](https://codeclimate.com/github/aarongough/sexpistol/test_coverage)
+[![Gem Version](https://badge.fury.io/rb/sexpistol.svg)](https://badge.fury.io/rb/sexpistol)
 
 # Sexpistol
 
@@ -28,6 +30,23 @@ would be parsed by Sexpistol like so:
   [:print, 2.0e10],
   [:print, [:+, 10, 12, 13]]
 ]]]
+```
+
+### Usage:
+
+```ruby
+# Parse an s-expression
+ast = Sexpistol.parse("(string (to (parse)))")
+#=> [:string, [:to, [:parse]]]
+
+# Change the representation
+ast[1][0] = :is
+ast[1][1][0] = :parsed
+#=> [:string, [:is, [:parsed]]]
+
+# Turn the array structure back into an S-Expression
+Sexpistol.to_sexp(ast)
+#=> "(string (is (parsed)))"
 ```
   
 ### Type mappings:
@@ -65,23 +84,6 @@ For convenience Sexpistol is packaged as a RubyGem, to install it simply enter t
 
 ```
 gem install sexpistol
-```
-  
-### Usage:
-
-```ruby
-# Parse an s-expression
-ast = Sexpistol.parse("(string (to (parse)))")
-#=> [:string, [:to, [:parse]]]
-
-# Change the representation
-ast[1][0] = :is
-ast[1][1][0] = :parsed
-#=> [:string, [:is, [:parsed]]]
-
-# Turn the array structure back into an S-Expression
-Sexpistol.to_sexp(ast)
-#=> "(string (is (parsed)))"
 ```
   
 ### Performance:
