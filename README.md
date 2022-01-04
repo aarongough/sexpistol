@@ -1,5 +1,5 @@
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
-![Actions Status](https://github.com/aarongough/sexpistol/actions/workflows/ruby.yml/badge.svg)
+[![Actions Status](https://github.com/aarongough/sexpistol/actions/workflows/build.yml/badge.svg)](https://github.com/aarongough/sexpistol/actions/workflows/build.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/a5ce9269a7b23614103c/maintainability)](https://codeclimate.com/github/aarongough/sexpistol/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a5ce9269a7b23614103c/test_coverage)](https://codeclimate.com/github/aarongough/sexpistol/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/sexpistol.svg)](https://badge.fury.io/rb/sexpistol)
