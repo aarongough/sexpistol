@@ -156,15 +156,13 @@ describe Sexpistol do
 
       it 'raises an error when given an input with invalid "integer"' do
         expect do
-          ast = Sexpistol.parse('(199AB)')
-          puts ast.inspect
+          Sexpistol.parse('(199AB)')
         end.to raise_error("Invalid token at position 1 near '199AB)'.")
       end
 
       it 'raises an error when given an input with invalid "float"' do
         expect do
-          ast = Sexpistol.parse('(12.45AB)')
-          puts ast.inspect
+          Sexpistol.parse('(12.45AB)')
         end.to raise_error("Invalid token at position 1 near '12.45AB)'.")
       end
     end
