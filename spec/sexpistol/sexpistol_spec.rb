@@ -249,6 +249,16 @@ describe Sexpistol do
         expect(ast).to be_a(Sexpistol::SExpressionArray)
       end
 
+      it 'parses multi-line string as array of expressions when ruby keyword literals is set to true' do
+        ast = Sexpistol.parse('
+          (define a 2)
+          (+ a a a)
+          (true)
+        ', parse_ruby_keyword_literals: true)
+        expect(ast).to eq([[:define, :a, 2], [:+, :a, :a, :a], [true]])
+        expect(ast).to be_a(Sexpistol::SExpressionArray)
+      end
+
       it 'parses symbol containing any character except single and double quotes, backquote, parentheses and comma' do
         ast = Sexpistol.parse("(~1!2@3#4$%5^6&7*890-_+=|\]}[{poiuytrewqasdfghjklmnbvcxzZXCVBNMLKJHGFDSAQWERTYU:;/?><)")
         expect(ast).to eq([:'~1!2@3#4$%5^6&7*890-_+=|]}[{poiuytrewqasdfghjklmnbvcxzZXCVBNMLKJHGFDSAQWERTYU:;/?><'])
@@ -325,43 +335,6 @@ describe Sexpistol do
       ast = [true, false, nil]
       string = Sexpistol.to_sexp(ast, scheme_compatability: true)
       expect(string).to eq('(#t #f ())')
-    end
-  end
-
-  describe '.recursive_map' do
-    it 'correctly maps a nested array' do
-      array = [1, [2, [3]]]
-      array = Sexpistol.recursive_map(array) { |x| x + 1 }
-
-      expect(array).to eq([2, [3, [4]]])
-    end
-  end
-
-  describe '.convert_scheme_literals' do
-    it 'converts true to #t' do
-      expect(Sexpistol.convert_scheme_literals(true)).to eq(:'#t')
-    end
-
-    it 'converts false to #f' do
-      expect(Sexpistol.convert_scheme_literals(false)).to eq(:'#f')
-    end
-
-    it 'converts nil to []' do
-      expect(Sexpistol.convert_scheme_literals(nil)).to eq([])
-    end
-  end
-
-  describe '.convert_ruby_keyword_literals' do
-    it 'converts :true to true' do
-      expect(Sexpistol.convert_ruby_keyword_literals([:true])).to eq([true])
-    end
-
-    it 'converts :false to false' do
-      expect(Sexpistol.convert_ruby_keyword_literals([:false])).to eq([false])
-    end
-
-    it 'converts :nil to nil' do
-      expect(Sexpistol.convert_ruby_keyword_literals([:nil])).to eq([nil])
     end
   end
 end
