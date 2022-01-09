@@ -242,8 +242,11 @@ describe Sexpistol do
         ast = Sexpistol.parse('
           (define a 2)
           (+ a a a)
+          (foo)
+          (bar)
         ')
-        expect(ast).to eq([[:define, :a, 2], [:+, :a, :a, :a]])
+        expect(ast).to eq([[:define, :a, 2], [:+, :a, :a, :a], [:foo], [:bar]])
+        expect(ast).to be_a(Sexpistol::SExpressionArray)
       end
 
       it 'parses symbol containing any character except single and double quotes, backquote, parentheses and comma' do
