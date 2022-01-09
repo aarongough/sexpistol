@@ -154,10 +154,18 @@ describe Sexpistol do
         end.to raise_error('String given is not an s-expression')
       end
 
-      it 'raises an error when given an input with invalid tokens' do
+      it 'raises an error when given an input with invalid "integer"' do
         expect do
-          Sexpistol.parse('(199AB)')
+          ast = Sexpistol.parse('(199AB)')
+          puts ast.inspect
         end.to raise_error("Invalid token at position 1 near '199AB)'.")
+      end
+
+      it 'raises an error when given an input with invalid "float"' do
+        expect do
+          ast = Sexpistol.parse('(12.45AB)')
+          puts ast.inspect
+        end.to raise_error("Invalid token at position 1 near '12.45AB)'.")
       end
     end
 
@@ -230,6 +238,14 @@ describe Sexpistol do
       it 'parses #f as symbol' do
         ast = Sexpistol.parse('(#f)')
         expect(ast).to eq([:'#f'])
+      end
+
+      it 'parses multi-line string as array of expressions' do
+        ast = Sexpistol.parse('
+          (define a 2)
+          (+ a a a)
+        ')
+        expect(ast).to eq([[:define, :a, 2], [:+, :a, :a, :a]])
       end
 
       it 'parses symbol containing any character except single and double quotes, backquote, parentheses and comma' do

@@ -6,8 +6,8 @@ class Sexpistol
   class Parser < StringScanner
     PARANTHESES = /[()]/.freeze
     STRING =      /"([^"\\]|\\.)*"/.freeze
-    FLOAT =       /[\-+]? [0-9]+ ((e[0-9]+) | (\.[0-9]+(e[0-9]+)?)) [\s()]/x.freeze
-    INTEGER =     /[\-+]?[0-9]+[\s()]/.freeze
+    FLOAT =       /[\-+]? [0-9]+ ((e[0-9]+) | (\.[0-9]+(e[0-9]+)?)) (?=[\s()])/x.freeze
+    INTEGER =     /([\-+]?[0-9]+)(?=[\s()])/.freeze
     SYMBOL =      /[^0-9()\s]+[^()\s]*/.freeze
 
     def initialize(string)
