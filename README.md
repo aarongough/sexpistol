@@ -58,17 +58,6 @@ Sexpistol.parse(string, parse_ruby_keyword_literals: false)
 Sexpistol.to_sexp(structure, scheme_compatability: false)
 # Output a nested set of arrays as an s-expression. Optionally 
 # output `true, false, nil` as their Scheme literal equivalents.
-
-Sexpistol.convert_ruby_keyword_literals(data)
-# Recursively maps over a nested array structure and converts 
-# any instances of :nil, :true, :false to their native Ruby equivalents.
-
-Sexpistol.convert_scheme_literals(data)
-# Converts Ruby literals to their equivalent Scheme literals
-
-Sexpistol.recursive_map(data, &block)
-# Recursively map over a nested set of arrays, applying the block 
-# to each item and returning the result.
 ```
   
 ### Type mappings:
@@ -108,7 +97,7 @@ Sexpistol.to_sexp([true, false, nil], scheme_compatability: true)
 Add Sexpistol to your gemfile:
 
 ```ruby
-gem 'sexpistol', '~>0.10.0'
+gem 'sexpistol', '~>0.1.2'
 ```
 
 And then execute:
